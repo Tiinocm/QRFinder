@@ -1,5 +1,4 @@
-import { array } from "astro:schema";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import pkg from "react-image-marker";
 import ImageMarker from "react-image-marker";
 const { Marker } = pkg;
@@ -23,20 +22,24 @@ const BlueprintSelector = () => {
         
     }
 
-    const handleClick = ( e ) => {
+    const handleDeleteMarker = (e, i) => {
         
-        const x = e.pageX - e.target.offsetLeft;
-        const y = e.pageY - e.target.offsetTop;
+        let result = confirm("Do you want to delete this marker?");
 
-        setMarkers([...markers, {top: y, left: x}]);
-        
+        if(result) {
+            let markersArray = [...markers];
+            
+            markersArray.splice(i, 1);
+
+            setMarkers(markersArray);
+        }
 
     }
 
 
     return(
 
-        <div className="w-full flex justify-center m-4">
+        <div className="flex flex-col justify-center items-center m-4">
             <div className="w-64">
                 <form action="" method="post">
 
@@ -56,6 +59,24 @@ const BlueprintSelector = () => {
                         markers={markers}
                         onAddMarker={(marker) => setMarkers([...markers, marker])}
                     />
+                )
+            }
+
+            {
+                markers && (
+                    <div>
+                        <ul>
+                            {markers.map( function(marker, i) {
+
+                                return(
+                                        <li key={i}>
+                                            Marker {i + 1} | pos: {parseInt(marker.top)} {parseInt(marker.left)} | <span className="text-red-500 font-bold" onClick={e => handleDeleteMarker(e, i)} >Delete</span>
+                                        </li>
+                                );
+
+                            })}
+                        </ul>
+                    </div>
                 )
             }
         </div>
