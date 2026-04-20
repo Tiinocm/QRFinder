@@ -1,2 +1,0 @@
-# QRFinder
-QRFinder
